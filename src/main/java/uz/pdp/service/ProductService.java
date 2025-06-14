@@ -10,10 +10,52 @@ import java.util.UUID;
 public class ProductService implements BaseService<Product> {
     private ArrayList<Product> products = new ArrayList<>();
 
+    public List<Product> showAllProducts(UUID sellerId) {
+        ArrayList<Product> sellerProducts = new ArrayList<>();
+        for (Product p : products) {
+            if (p != null && p.getSellerId().equals(sellerId)) {
+                sellerProducts.add(p);
+            }
+        }
+        return sellerProducts;
+    }
+    public List<Product> getByCategory(Category category) {
+        List<Product> result = new ArrayList<>();
+        for(Product p : products) {
+            if(p != null && p.getCategory().equals(category) && p.isActive()) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+    public List<Product> searchByName(String name) {
+        List<Product> result = new ArrayList<>();
+        for (Product p : products) {
+            if (p != null && p.isActive() && p.getName().toLowerCase().contains(name.toLowerCase())) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+    public List<Product> searchByName(String name) {
+        List<Product> result = new ArrayList<>();
+        for (Product p : products) {
+            if (p != null && p.isActive() && p.getName().toLowerCase().contains(name.toLowerCase())) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+    
     @Override
     public boolean add(Product product) {
-        products.add(product);
-        return true;
+      if (!isDefined(product.getSellerId(), product.getName())) {
+            products.add(product);
+            return true;
+        }
+        return false;
     }
 
     @Override
